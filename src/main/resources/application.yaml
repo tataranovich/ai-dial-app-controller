@@ -6,13 +6,11 @@ logging:
 
 app:
   kube-config: ${user.home}/.kube/config
-  build-namespace: build-namespace
-  deploy-namespace: deploy-namespace
-  docker-registry: docker.registry
+  build-namespace: default
+  deploy-namespace: default
   docker-registry-protocol: https
-  puller-image: ${app.docker-registry}/builder:latest
+  template-image: ${app.docker-registry}/template:latest
   builder-image: gcr.io/kaniko-project/executor:latest
-  dial-base-url: https://dial.core
   image-name-format: app-%s
   image-label: latest
   image-build-timeout-sec: 300
@@ -20,7 +18,7 @@ app:
   heartbeat-period-sec: 30
   max-error-log-lines: 20
   max-error-log-chars: 1000
-  puller-container: puller
+  template-container: template
   builder-container: builder
   service-container: app-container
   allowed-python-packages: |
@@ -90,8 +88,8 @@ app:
           serviceAccountName: builder
           automountServiceAccountToken: false
           initContainers:
-            - name: ${app.puller-container}
-              image: ${app.puller-image}
+            - name: ${app.template-container}
+              image: ${app.template-image}
               imagePullPolicy: Always
               env:
                 - name: DIAL_BASE_URL

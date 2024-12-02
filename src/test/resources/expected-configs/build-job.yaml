@@ -39,9 +39,9 @@ spec:
           envFrom:
             - secretRef:
                 name: app-ctrl-dial-auth-test-name
-          image: test-puller-image
+          image: test-template-image
           imagePullPolicy: Always
-          name: puller
+          name: template
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 1001

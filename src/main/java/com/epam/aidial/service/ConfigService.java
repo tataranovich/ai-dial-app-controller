@@ -50,7 +50,7 @@ public class ConfigService {
     private final RegistryService registryService;
     private final AppConfiguration appConfiguration;
 
-    @Value("${app.puller-container}")
+    @Value("${app.template-container}")
     private final String pullerContainer;
 
     @Value("${app.builder-container}")

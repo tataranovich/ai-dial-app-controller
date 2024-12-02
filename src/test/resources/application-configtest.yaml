@@ -1,5 +1,5 @@
 app:
-  puller-image: test-puller-image
+  template-image: test-template-image
   builder-image: test-builder-image
   dial-base-url: test-dial-base-url
   service-container: test-container
