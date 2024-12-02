@@ -31,7 +31,17 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
    docker build -t ai-dial-app-controller .
    ```
 
-3. **Run the application with environment variables:**
+3. **Prepare the Builder Template:**
+
+   Before starting the application, ensure that the builder template image is built and pushed to your Docker registry. This image is used during the build process of Python applications.
+
+   ```bash
+   cd builder-template
+   docker build -t your-docker-registry/builder-template:latest .
+   docker push your-docker-registry/builder-template:latest
+   ```
+
+4. **Run the application with environment variables:**
 
    ```bash
    docker run -p 8080:8080 \
@@ -46,22 +56,25 @@ The application can be configured using environment variables or by modifying th
 
 ### Environment Variables
 
-| Setting                          | Default            | Required | Description                                           |
-|----------------------------------|--------------------|----------|-------------------------------------------------------|
-| `APP_DOCKER_REGISTRY`            |                    | Yes      | The Docker registry where images are stored.          |
-| `APP_DIAL_BASE_URL`              |                    | Yes      | The base URL for the DIAL service.                    |
-| `APP_DEPLOY_NAMESPACE`           | `default`          | No       | The Kubernetes namespace used for deploying services. |
-| `APP_BUILD_NAMESPACE`            | `default`          | No       | The Kubernetes namespace used for building images.    |
-| `APP_HEARTBEAT_PERIOD_SEC`       | `30`               | No       | The interval in seconds for sending heartbeat events. |
-| `APP_IMAGE_LABEL`                | `latest`           | No       | The label used for Docker images.                     |
-| `APP_IMAGE_BUILD_TIMEOUT_SEC`    | `300`              | No       | Timeout in seconds for building Docker images.        |
-| `APP_SERVICE_SETUP_TIMEOUT_SEC`  | `300`              | No       | Timeout in seconds for setting up Knative services.   |
-| `APP_MAX_ERROR_LOG_LINES`        | `20`               | No       | Maximum number of error log lines to display.         |
-| `APP_MAX_ERROR_LOG_CHARS`        | `1000`             | No       | Maximum number of error log characters to display.    |
-| `APP_BUILDER_TEMPLATE_CONTAINER` | `builder-template` | No       | Name of the puller container.                         |
-| `APP_BUILDER_CONTAINER`          | `builder`          | No       | Name of the builder container.                        |
-| `APP_SERVICE_CONTAINER`          | `app-container`    | No       | Name of the service container.                        |
-| `APP_DEFAULT_RUNTIME`            | `python3.11`       | No       | Default runtime for Python applications.              |
+| Setting                         | Default                                  | Required   | Description                                                  |
+|---------------------------------|------------------------------------------|------------|--------------------------------------------------------------|
+| `APP_DOCKER_REGISTRY`           |                                          | Yes        | The Docker registry where images are stored.                 |
+| `APP_DIAL_BASE_URL`             |                                          | Yes        | The base URL for the DIAL service.                           |
+| `APP_DEPLOY_NAMESPACE`          | `default`                                | No         | The Kubernetes namespace used for deploying services.        |
+| `APP_BUILD_NAMESPACE`           | `default`                                | No         | The Kubernetes namespace used for building images.           |
+| `APP_HEARTBEAT_PERIOD_SEC`      | `30`                                     | No         | The interval in seconds for sending heartbeat events.        |
+| `APP_IMAGE_NAME_FORMAT`         | `app-%s`                                 | No         | Format for naming Docker images.                             |
+| `APP_IMAGE_LABEL`               | `latest`                                 | No         | The label used for Docker images.                            |
+| `APP_IMAGE_BUILD_TIMEOUT_SEC`   | `300`                                    | No         | Timeout in seconds for building Docker images.               |
+| `APP_SERVICE_SETUP_TIMEOUT_SEC` | `300`                                    | No         | Timeout in seconds for setting up Knative services.          |
+| `APP_MAX_ERROR_LOG_LINES`       | `20`                                     | No         | Maximum number of error log lines to return in message.      |
+| `APP_MAX_ERROR_LOG_CHARS`       | `1000`                                   | No         | Maximum number of error log characters to return in message. |
+| `APP_TEMPLATE_IMAGE`            | `${app.docker-registry}/template:latest` | No         | The Docker image used as the template for building.          |
+| `APP_BUILDER_IMAGE`             | `gcr.io/kaniko-project/executor:latest`  | No         | The Docker image used for building applications.             |
+| `APP_TEMPLATE_CONTAINER`        | `template`                               | No         | Name of the template container in Kubernetes job.            |
+| `APP_BUILDER_CONTAINER`         | `builder`                                | No         | Name of the builder container in Kubernetes job.             |
+| `APP_SERVICE_CONTAINER`         | `app-container`                          | No         | Name of the service container.                               |
+| `APP_DEFAULT_RUNTIME`           | `python3.11`                             | No         | Default runtime for Python applications.                     |
 
 ## Usage
 
@@ -69,7 +82,7 @@ The application exposes RESTful APIs to manage the lifecycle of applications. Be
 
 ### Create Image
 
-Builds a Docker image from the specified source code using Server-Sent Events (SSE).
+Builds a Docker image from the specified source code.
 
 **Request:**
 
@@ -84,11 +97,11 @@ curl -N -X POST http://localhost:8080/v1/image/my-python-app \
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the image creation process.
+The response is streamed as Server-Sent Events (SSE), providing real-time updates on the image creation process.
 
 ### Delete Image
 
-Deletes the Docker image for the specified application using SSE.
+Deletes the Docker image for the specified application.
 
 **Request:**
 
@@ -102,7 +115,7 @@ The response is streamed as SSE, providing real-time updates on the image deleti
 
 ### Create Deployment
 
-Deploys the application as a Knative service using SSE.
+Deploys the application as a Knative service.
 
 **Request:**
 
@@ -122,7 +135,7 @@ The response is streamed as SSE, providing real-time updates on the deployment p
 
 ### Delete Deployment
 
-Deletes the Knative service for the specified application using SSE.
+Deletes the Knative service for the specified application.
 
 **Request:**
 
@@ -186,8 +199,6 @@ sequenceDiagram
     Kubernetes-->>AI-Dial App Controller: Logs
     AI-Dial App Controller-->>User: Application Logs
 ```
-
-## License
 
 ## License
 
