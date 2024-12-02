@@ -9,7 +9,7 @@ app:
   build-namespace: default
   deploy-namespace: default
   docker-registry-protocol: https
-  template-image: ${app.docker-registry}/template:latest
+  template-image: ${app.docker-registry}/builder-template:latest
   builder-image: gcr.io/kaniko-project/executor:latest
   image-name-format: app-%s
   image-label: latest
