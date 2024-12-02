@@ -35,8 +35,6 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
 
    ```bash
    docker run -p 8080:8080 \
-     -e APP_BUILD_NAMESPACE=your-build-namespace \
-     -e APP_DEPLOY_NAMESPACE=your-deploy-namespace \
      -e APP_DOCKER_REGISTRY=your-docker-registry \
      -e APP_DIAL_BASE_URL=https://your-dial-base-url \
      ai-dial-app-controller
@@ -50,10 +48,10 @@ The application can be configured using environment variables or by modifying th
 
 | Setting                          | Default            | Required | Description                                           |
 |----------------------------------|--------------------|----------|-------------------------------------------------------|
-| `APP_BUILD_NAMESPACE`            |                    | Yes      | The Kubernetes namespace used for building images.    |
-| `APP_DEPLOY_NAMESPACE`           |                    | Yes      | The Kubernetes namespace used for deploying services. |
 | `APP_DOCKER_REGISTRY`            |                    | Yes      | The Docker registry where images are stored.          |
 | `APP_DIAL_BASE_URL`              |                    | Yes      | The base URL for the DIAL service.                    |
+| `APP_DEPLOY_NAMESPACE`           | `default`          | No       | The Kubernetes namespace used for deploying services. |
+| `APP_BUILD_NAMESPACE`            | `default`          | No       | The Kubernetes namespace used for building images.    |
 | `APP_HEARTBEAT_PERIOD_SEC`       | `30`               | No       | The interval in seconds for sending heartbeat events. |
 | `APP_IMAGE_LABEL`                | `latest`           | No       | The label used for Docker images.                     |
 | `APP_IMAGE_BUILD_TIMEOUT_SEC`    | `300`              | No       | Timeout in seconds for building Docker images.        |
@@ -191,4 +189,18 @@ sequenceDiagram
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+## License
+
+Copyright (C) 2024 EPAM Systems
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

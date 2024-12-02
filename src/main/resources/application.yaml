@@ -6,6 +6,8 @@ logging:
 
 app:
   kube-config: ${user.home}/.kube/config
+  build-namespace: default
+  deploy-namespace: default
   docker-registry-protocol: https
   template-image: ${app.docker-registry}/template:latest
   builder-image: gcr.io/kaniko-project/executor:latest
