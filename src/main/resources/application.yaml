@@ -72,12 +72,25 @@ app:
       template:
         metadata:
           annotations:
-            "[autoscaling.knative.dev/initial-scale]": 0
+            "[autoscaling.knative.dev/initial-scale]": "0"
+            "[autoscaling.knative.dev/max-scale]": "3"
+            "[autoscaling.knative.dev/window]": "300s"
         spec:
+          idleTimeoutSeconds: 300
+          containerConcurrency: 50
           automountServiceAccountToken: false
           containers:
             - name: ${app.service-container}
               imagePullPolicy: Always
+              resources:
+                requests:
+                  cpu: "500m"
+                  memory: "1G"
+                  ephemeral-storage: "500M"
+                limits:
+                  cpu: "1000m"
+                  memory: "4G"
+                  ephemeral-storage: "1G"
   job-config:
     apiVersion: batch/v1
     kind: Job
