@@ -21,7 +21,7 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/ai-dial-app-controller.git
+   git clone https://github.com/epam/ai-dial-app-controller.git
    cd ai-dial-app-controller
    ```
 
@@ -36,9 +36,7 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
    Before starting the application, ensure that the builder template image is built and pushed to your Docker registry. This image is used during the build process of Python applications.
 
    ```bash
-   cd builder-template
-   docker build -t your-docker-registry/builder-template:latest .
-   docker push your-docker-registry/builder-template:latest
+   docker buildx build --push -t your-docker-registry/builder-template:latest builder-template
    ```
 
 4. **Run the application with environment variables:**
