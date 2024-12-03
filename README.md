@@ -96,7 +96,14 @@ curl -N -X POST http://localhost:8080/v1/image/my-python-app \
 
 **Response:**
 
-The response is streamed as Server-Sent Events (SSE), providing real-time updates on the image creation process.
+The response is streamed as Server-Sent Events (SSE). Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"image":"your-docker-registry/my-python-app:latest"}
+```
 
 ### Delete Image
 
@@ -110,7 +117,14 @@ curl -N -X DELETE http://localhost:8080/v1/image/my-python-app
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the image deletion process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"deleted":true}
+```
 
 ### Create Deployment
 
@@ -130,7 +144,14 @@ curl -N -X POST http://localhost:8080/v1/deployment/my-python-app \
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the deployment process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"url":"http://app-ctrl-app-my-python-app.my-domain.com"}
+```
 
 ### Delete Deployment
 
@@ -144,7 +165,14 @@ curl -N -X DELETE http://localhost:8080/v1/deployment/my-python-app
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the deployment deletion process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"deleted":true}
+```
 
 ### Get Logs
 
