@@ -87,6 +87,7 @@ Builds a Docker image from the specified source code.
 ```bash
 curl -N -X POST http://localhost:8080/v1/image/my-python-app \
      -H "Content-Type: application/json" \
+     -H "Authorization: Bearer DIAL_JWT_TOKEN" \
      -d '{
            "sources": "files/dial bucket/sources folder",
            "runtime": "python3.11"
