@@ -21,7 +21,7 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/ai-dial-app-controller.git
+   git clone https://github.com/epam/ai-dial-app-controller.git
    cd ai-dial-app-controller
    ```
 
@@ -36,9 +36,7 @@ AI-Dial App Controller is a Java-based web service application that orchestrates
    Before starting the application, ensure that the builder template image is built and pushed to your Docker registry. This image is used during the build process of Python applications.
 
    ```bash
-   cd builder-template
-   docker build -t your-docker-registry/builder-template:latest .
-   docker push your-docker-registry/builder-template:latest
+   docker buildx build --push -t your-docker-registry/builder-template:latest builder-template
    ```
 
 4. **Run the application with environment variables:**
@@ -89,6 +87,7 @@ Builds a Docker image from the specified source code.
 ```bash
 curl -N -X POST http://localhost:8080/v1/image/my-python-app \
      -H "Content-Type: application/json" \
+     -H "Authorization: Bearer DIAL_JWT_TOKEN" \
      -d '{
            "sources": "files/dial bucket/sources folder",
            "runtime": "python3.11"
@@ -97,7 +96,14 @@ curl -N -X POST http://localhost:8080/v1/image/my-python-app \
 
 **Response:**
 
-The response is streamed as Server-Sent Events (SSE), providing real-time updates on the image creation process.
+The response is streamed as Server-Sent Events (SSE). Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"image":"your-docker-registry/my-python-app:latest"}
+```
 
 ### Delete Image
 
@@ -111,7 +117,14 @@ curl -N -X DELETE http://localhost:8080/v1/image/my-python-app
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the image deletion process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"deleted":true}
+```
 
 ### Create Deployment
 
@@ -131,7 +144,14 @@ curl -N -X POST http://localhost:8080/v1/deployment/my-python-app \
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the deployment process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"url":"http://app-ctrl-app-my-python-app.my-domain.com"}
+```
 
 ### Delete Deployment
 
@@ -145,7 +165,14 @@ curl -N -X DELETE http://localhost:8080/v1/deployment/my-python-app
 
 **Response:**
 
-The response is streamed as SSE, providing real-time updates on the deployment deletion process.
+The response is streamed as SSE. Heartbeats are sent as comments and the result is preceded by "result" event.
+Example:
+```
+:heartbeat
+
+event:result
+data:{"deleted":true}
+```
 
 ### Get Logs
 
