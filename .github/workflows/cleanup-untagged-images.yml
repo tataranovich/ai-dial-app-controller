@@ -15,6 +15,6 @@ jobs:
         with:
           account: ${{ github.repository_owner }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          image-names: ${{ github.event.repository.name }}
+          image-names: "${{ github.event.repository.name }} ${{ github.event.repository.name }}-builder"
           tag-selection: "untagged"
           cut-off: "1d"

@@ -19,6 +19,6 @@ jobs:
           lfs: true
       - uses: epam/ai-dial-ci/actions/build_docker@multiple-images
         with:
-          build-context: ./builder-template
+          build_context: ./builder-template
           image_name: ghcr.io/${{ github.repository }}-builder
           image_tag: test
