@@ -20,5 +20,5 @@ jobs:
       - uses: epam/ai-dial-ci/actions/build_docker@multiple-images
         with:
           build-context: ./builder-template
-          image_name: ghcr.io/${{ env.IMAGE_NAME }}
+          image_name: ghcr.io/${{ github.repository }}-builder
           image_tag: test
